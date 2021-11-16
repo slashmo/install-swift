@@ -1,0 +1,42 @@
+name: 'Install Swift'
+description: 'Install the given Swift version.'
+
+inputs:
+  version:
+    description: 'The Swift version to install.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Determine Ubuntu Version
+    run: |
+      UBUNTU_VERSION=$(lsb_release -rs)
+
+      if [ $UBUNTU_VERSION != "18.04" ] && [ $UBUNTU_VERSION != "20.04" ]; then
+          echo "No Swift Toolchain available for Ubuntu version '$UBUNTU_VERSION'."
+          echo "Visit https://swift.org/download for more information."
+          exit 1;
+      fi
+
+      echo "UBUNTU_VERSION=$UBUNTU_VERSION" >> $GITHUB_ENV
+    shell: bash
+
+  - name: Cache Swift Toolchain
+    id: swift-toolchain-cache
+    uses: actions/cache@v2
+    with:
+      path: /usr/share/swift-toolchain
+      key: ubuntu-${{ env.UBUNTU_VERSION }}-${{ inputs.version }}
+
+  - name: Install Swift Toolchain
+    run: SWIFT_VERSION=${{ inputs.version }} $GITHUB_ACTION_PATH/install-swift.sh
+    shell: bash
+
+  - name: Print Swift Version
+    run: swift --version
+    shell: bash
+
+branding:
+  icon: 'briefcase'
+  color: 'orange'
