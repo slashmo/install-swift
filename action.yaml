@@ -9,11 +9,18 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: Determine Ubuntu Version
+  - name: Determine Cache Key
     run: |
-      UBUNTU_VERSION=$(lsb_release -rs)
+      # ubuntu-20.04-5.5
+      # macos-12.2-5.5
 
-      echo "UBUNTU_VERSION=$UBUNTU_VERSION" >> $GITHUB_ENV
+      if [ $RUNNER_OS == Linux ]; then
+        PLATFORM_PART=ubuntu-$(lsb_release -rs)
+      elif [ $RUNNER_OS == macOS ]; then
+        PLATFORM_PART=macos-$(sw_vers -ProductVersion)
+      fi
+
+      echo "CACHE_KEY=$PLATFORM_PART-${{ inputs.version }}" >> $GITHUB_ENV
     shell: bash
 
   - name: Cache Swift Toolchain
@@ -21,7 +28,7 @@ runs:
     uses: actions/cache@v2
     with:
       path: /usr/share/swift-toolchain
-      key: ubuntu-${{ env.UBUNTU_VERSION }}-${{ inputs.version }}
+      key: ${{ env.CACHE_KEY }}-${{ inputs.version }}
 
   - name: Install Swift Toolchain
     run: SWIFT_VERSION=${{ inputs.version }} $GITHUB_ACTION_PATH/install-swift.sh
