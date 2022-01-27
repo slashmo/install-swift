@@ -14,21 +14,32 @@ runs:
       # ubuntu-20.04-5.5
       # macos-12.2-5.5
 
-      if [ $RUNNER_OS == Linux ]; then
-        PLATFORM=ubuntu-$(lsb_release -rs)
-      elif [ $RUNNER_OS == macOS ]; then
-        PLATFORM=macos-$(sw_vers -productVersion)
+      SWIFT_VERSION=${{ inputs.version }}
+
+      if [[ $SWIFT_VERSION == swift-DEVELOPMENT-SNAPSHOT* ]]; then
+          RELEASE_NAME=$SWIFT_VERSION
+      else
+          RELEASE_NAME=swift-$SWIFT_VERSION-RELEASE
       fi
 
-      echo "CACHE_KEY=$PLATFORM-${{ inputs.version }}" >> $GITHUB_ENV
+      if [ $RUNNER_OS == Linux ]; then
+        PLATFORM=ubuntu-$(lsb_release -rs)
+        TOOLCHAIN_PATH=/opt/swift-toolchains/$RELEASE_NAME
+      elif [ $RUNNER_OS == macOS ]; then
+        PLATFORM=macos-$(sw_vers -productVersion)
+        TOOLCHAIN_PATH=/Library/Developer/Toolchains/$RELEASE_NAME.xctoolchain
+      fi
+
+      echo "TOOLCHAIN_PATH=$TOOLCHAIN_PATH" >> $GITHUB_ENV
+      echo "CACHE_KEY=$PLATFORM-$SWIFT_VERSION" >> $GITHUB_ENV
     shell: bash
 
-  # - name: Cache Swift Toolchain
-  #   id: swift-toolchain-cache
-  #   uses: actions/cache@v2
-  #   with:
-  #     path: /opt/swift-toolchains/${{ inputs.version }}.xctoolchain
-  #     key: ${{ env.CACHE_KEY }}
+  - name: Cache Swift Toolchain
+    id: swift-toolchain-cache
+    uses: actions/cache@v2
+    with:
+      path: ${{ env.TOOLCHAIN_PATH }}
+      key: ${{ env.CACHE_KEY }}
 
   - name: Install Swift Toolchain
     run: SWIFT_VERSION=${{ inputs.version }} $GITHUB_ACTION_PATH/install-swift.sh
