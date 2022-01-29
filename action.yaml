@@ -31,7 +31,7 @@ runs:
       fi
 
       echo "TOOLCHAIN_CACHE_PATH=$TOOLCHAIN_CACHE_PATH" >> $GITHUB_ENV
-      echo "CACHE_KEY=$PLATFORM-$SWIFT_VERSION" >> $GITHUB_ENV
+      echo "TOOLCHAIN_CACHE_KEY=$PLATFORM-$SWIFT_VERSION" >> $GITHUB_ENV
     shell: bash
 
   - name: Cache Swift Toolchain
