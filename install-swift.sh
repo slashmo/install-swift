@@ -13,6 +13,7 @@ install_swift () {
     else
         download_toolchain
         if_linux_verify_signature
+        if_macos_run_installer
     fi
 
     if_linux_install_system_dependencies
@@ -82,6 +83,17 @@ if_linux_verify_signature () {
     gpg --verify $(download_file tar.gz.sig)
 }
 
+if_macos_run_installer () {
+    if ! [[ $IS_MACOS ]]; then
+        return 0;
+    fi
+
+    echo "Running installer 💻"
+    TOOLCHAIN=$(release_name).xctoolchain
+    xattr -dr com.apple.quarantine $(download_file pkg)
+    installer -pkg $(download_file pkg) -target CurrentUserHomeDirectory
+}
+
 install_toolchain () {
     echo "Installing Swift toolchain 💻"
 
@@ -89,11 +101,8 @@ install_toolchain () {
         tar xzf $(download_file tar.gz)
         mkdir $(toolchains_path)
         mv $(download_file) $(toolchain_path)
-    elif [ $IS_MACOS ]; then
-        TOOLCHAIN=$(release_name).xctoolchain
-        TOOLCHAINS_PATH=/Library/Developer/Toolchains
-        sudo installer -pkg $(download_file pkg) -target /
     fi
+
     PATH=$(toolchain_path)/usr/bin:${PATH}
     echo "PATH=$PATH" >> $GITHUB_ENV
 }
@@ -126,7 +135,7 @@ toolchains_path () {
     if [ $IS_LINUX ]; then
         echo /opt/swift-toolchains
     elif [ $IS_MACOS ]; then
-        echo /Library/Developer/Toolchains
+        echo ${HOME}/Library/Developer/Toolchains
     fi
 }
 

@@ -27,7 +27,7 @@ runs:
         TOOLCHAIN_PATH=/opt/swift-toolchains/$RELEASE_NAME
       elif [ $RUNNER_OS == macOS ]; then
         PLATFORM=macos-$(sw_vers -productVersion)
-        TOOLCHAIN_PATH=/Library/Developer/Toolchains/$RELEASE_NAME.xctoolchain
+        TOOLCHAIN_PATH=${HOME}/Library/Developer/Toolchains/$RELEASE_NAME.xctoolchain
       fi
 
       echo "TOOLCHAIN_PATH=$TOOLCHAIN_PATH" >> $GITHUB_ENV
@@ -45,9 +45,9 @@ runs:
     run: SWIFT_VERSION=${{ inputs.version }} $GITHUB_ACTION_PATH/install-swift.sh
     shell: bash
 
-  - name: Print Swift Version
-    run: swift --version
-    shell: bash
+  # - name: Print Swift Version
+  #   run: swift --version
+  #   shell: bash
 
 branding:
   icon: 'briefcase'
