@@ -10,6 +10,11 @@ jobs:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
         swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a]
+        include:
+          - swift: 5.5
+            expected-version-string: "Swift version 5.5 (swift-5.5-RELEASE)"
+          - swift: swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a
+            expected-version-string: "Swift version 5.6-dev (LLVM 7b20e61dd04138a, Swift 9438cf6b2e83c5f)"
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -23,3 +28,8 @@ jobs:
 
     - name: Print Swift Version
       run: swift --version
+
+    - name: Check Swift Version
+      run: |
+        set -e
+        swift --version | grep "${{ matrix.expected-version-string }}"
