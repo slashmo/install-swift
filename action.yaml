@@ -45,9 +45,9 @@ runs:
     run: SWIFT_VERSION=${{ inputs.version }} $GITHUB_ACTION_PATH/install-swift.sh
     shell: bash
 
-  # - name: Print Swift Version
-  #   run: swift --version
-  #   shell: bash
+  - name: Print Swift Version
+    run: swift --version
+    shell: bash
 
 branding:
   icon: 'briefcase'
