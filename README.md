@@ -38,9 +38,9 @@ jobs:
     strategy:
       matrix:
         swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a]
-        ubuntu: [ubuntu-18.04, ubuntu-20.04]
+        os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
         fail-fast: false
-    runs-on: ${{ matrix.ubuntu }}
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Install Swift
       uses: slashmo/install-swift@v0.1.0

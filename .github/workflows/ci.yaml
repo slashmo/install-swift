@@ -8,8 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
-        swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a]
+        os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
+        swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a]
     runs-on: ${{ matrix.os }}
 
     steps:
