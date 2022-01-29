@@ -1,6 +1,7 @@
 name: CI
 on:
   push:
+  pull_request:
 
 jobs:
   ci:
@@ -19,6 +20,6 @@ jobs:
       uses: ./
       with:
         version: ${{ matrix.swift }}
-    
+
     - name: Print Swift Version
       run: swift --version
