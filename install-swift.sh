@@ -116,12 +116,19 @@ install_toolchain () {
 # https://download.swift.org/swift-5.5.2-release/ubuntu1804/swift-5.5.2-RELEASE/swift-5.5.2-RELEASE-ubuntu18.04.tar.gz
 # https://download.swift.org/swift-5.5.2-release/ubuntu2004/swift-5.5.2-RELEASE/swift-5.5.2-RELEASE-ubuntu20.04.tar.gz
 
-# Example development snapshot URLs
+# Example trunk development snapshot URLs
 # https://download.swift.org/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a-osx.pkg
 # https://download.swift.org/development/ubuntu1804/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a-ubuntu18.04.tar.gz
 # https://download.swift.org/development/ubuntu1804/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a-ubuntu18.04.tar.gz.sig
 # https://download.swift.org/development/ubuntu2004/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a-ubuntu20.04.tar.gz
 # https://download.swift.org/development/ubuntu2004/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a/swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a-ubuntu20.04.tar.gz.sig
+
+# Example version-specific development snapshot URLs
+# https://download.swift.org/swift-5.6-branch/xcode/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a-osx.pkg
+# https://download.swift.org/swift-5.6-branch/ubuntu1804/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a-ubuntu18.04.tar.gz
+# https://download.swift.org/swift-5.6-branch/ubuntu1804/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a-ubuntu18.04.tar.gz.sig
+# https://download.swift.org/swift-5.6-branch/ubuntu2004/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a-ubuntu20.04.tar.gz
+# https://download.swift.org/swift-5.6-branch/ubuntu2004/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a/swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-11-a-ubuntu20.04.tar.gz.sig
 
 toolchain_path () {
     if [ $IS_LINUX ]; then
@@ -140,7 +147,7 @@ toolchains_path () {
 }
 
 release_name () {
-    if [[ $SWIFT_VERSION == swift-DEVELOPMENT-SNAPSHOT* ]]; then
+    if [[ $SWIFT_VERSION == *DEVELOPMENT-SNAPSHOT* ]]; then
         RELEASE_NAME=$SWIFT_VERSION
     else
         RELEASE_NAME=swift-$SWIFT_VERSION-RELEASE
@@ -173,6 +180,8 @@ download_url () {
 
     if [[ $SWIFT_VERSION == swift-DEVELOPMENT-SNAPSHOT* ]]; then
         FOLDER=development
+    elif [[ $SWIFT_VERSION =~ swift-(.*)-DEVELOPMENT-SNAPSHOT-.* ]]; then
+        FOLDER=swift-${BASH_REMATCH[1]}-branch
     else
         FOLDER=swift-$SWIFT_VERSION-release
     fi

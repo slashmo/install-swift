@@ -6,8 +6,9 @@ This action allows installing Swift toolchains, with support for both release an
 
 ### Inputs
 
-- `version` - The Swift version you want to install. This may either be a release version like `5.5`, or a development
-snapshot like `swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a`.
+- `version` - The Swift version you want to install. This may either be a release version like `5.5`, a trunk
+development snapshot like `swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a`, or a snapshot of the upcoming release, e.g.
+`swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-09-a`.
 
 ### Example
 
@@ -37,7 +38,7 @@ jobs:
     name: Run Tests
     strategy:
       matrix:
-        swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a]
+        swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a, swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-09-a]
         os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
         fail-fast: false
     runs-on: ${{ matrix.os }}
