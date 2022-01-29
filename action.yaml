@@ -16,7 +16,7 @@ runs:
 
       SWIFT_VERSION=${{ inputs.version }}
 
-      if [[ $SWIFT_VERSION == swift-DEVELOPMENT-SNAPSHOT* ]]; then
+      if [[ $SWIFT_VERSION == *DEVELOPMENT-SNAPSHOT* ]]; then
           RELEASE_NAME=$SWIFT_VERSION
       else
           RELEASE_NAME=swift-$SWIFT_VERSION-RELEASE
