@@ -8,30 +8,35 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04, macos-latest]
-        swift: [5.5, swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a, swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-09-a]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-latest]
+        swift:
+          [
+            5.7,
+            swift-DEVELOPMENT-SNAPSHOT-2023-01-18-a,
+            swift-5.8-DEVELOPMENT-SNAPSHOT-2023-01-13-a,
+          ]
         include:
-          - swift: 5.5
-            expected-version-string: "Swift version 5.5 (swift-5.5-RELEASE)"
-          - swift: swift-DEVELOPMENT-SNAPSHOT-2022-01-09-a
-            expected-version-string: "Swift version 5.6-dev (LLVM 7b20e61dd04138a, Swift 9438cf6b2e83c5f)"
-          - swift: swift-5.6-DEVELOPMENT-SNAPSHOT-2022-01-09-a
-            expected-version-string: "Swift version 5.6-dev (LLVM 143f1389db63309, Swift 00f7685e0968cbb)"
+          - swift: 5.7
+            expected-version-string: "Swift version 5.7 (swift-5.7-RELEASE)"
+          - swift: swift-DEVELOPMENT-SNAPSHOT-2023-01-18-a
+            expected-version-string: "Swift version 5.9-dev (LLVM 3f23b4ceaf01213, Swift 0763e4b98c74b5b)"
+          - swift: swift-5.8-DEVELOPMENT-SNAPSHOT-2023-01-13-a
+            expected-version-string: "Swift version 5.8-dev (LLVM 08f7fecaf6cedb8, Swift 7632e9a645bcb05)"
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3.2.0
+      - name: Checkout
+        uses: actions/checkout@v3.2.0
 
-    - name: Install Swift
-      uses: ./
-      with:
-        version: ${{ matrix.swift }}
+      - name: Install Swift
+        uses: ./
+        with:
+          version: ${{ matrix.swift }}
 
-    - name: Print Swift Version
-      run: swift --version
+      - name: Print Swift Version
+        run: swift --version
 
-    - name: Check Swift Version
-      run: |
-        set -e
-        swift --version | grep "${{ matrix.expected-version-string }}"
+      - name: Check Swift Version
+        run: |
+          set -e
+          swift --version | grep "${{ matrix.expected-version-string }}"
