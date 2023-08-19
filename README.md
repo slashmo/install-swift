@@ -14,7 +14,7 @@ development snapshot like `swift-DEVELOPMENT-SNAPSHOT-2021-11-12-a`, or a snapsh
 
 ```yaml
 - name: Install Swift
-  uses: slashmo/install-swift@v0.1.0
+  uses: slashmo/install-swift@v0.4.0
   with:
     version: 5.5
 ```
@@ -44,7 +44,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Install Swift
-      uses: slashmo/install-swift@v0.1.0
+      uses: slashmo/install-swift@v0.4.0
       with:
         version: ${{ matrix.swift }}
     - name: Checkout
